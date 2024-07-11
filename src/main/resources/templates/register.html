@@ -1,40 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="base::layout(~{::section})">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Form</title>
-    <link rel="stylesheet" th:href="@{../css/styles.css}">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
 </head>
 <body>
-<div class="container">
-    <h2>Registration Form</h2>
-    <div class="message" th:if="${message != null}">
-        [[${message}]]
-    </div>
-    <form
-            th:action="@{/registration}"
-            method="post"
-            role="form"
-            th:object="${user}"
-    >
-        <div class="form-group">
-            <label for="fullname">Fullname:</label>
-            <input th:field="*{fullname}" type="text" id="fullname" name="fullname" placeholder="Enter your fullname" required>
-        </div>
+	<section>
+		<div class="container p-3">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+					<div class="card">
+						<div class="card-header text-center fs-4">Register Page</div>
 
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input th:field="*{email}" type="email" id="email" name="email" placeholder="Enter your email" required>
-        </div>
 
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input th:field="*{password}" type="password" id="password" name="password" placeholder="Enter your password" required>
-        </div>
-        <input type="submit" value="Register">
-    </form>
+						<th:block th:if="${session.msg}">
+							<p class="text-center text-success fs-4">[[${session.msg}]]</p>
+							<th:block th:text="${@userServiceImpl.removeSessionMessage()}"></th:block>
 
-</div>
+						</th:block>
+
+						<div class="card-body">
+							<form action="saveUser" method="post">
+								<div class="mb-3">
+									<label>Enter Full Name</label> <input type="text" name="name"
+										class="form-control">
+								</div>
+								<div class="mb-3">
+									<label>Enter Email</label> <input type="text" name="email"
+										class="form-control">
+								</div>
+
+								<div class="mb-3">
+									<label>Enter Mobile Number</label> <input type="number"
+										name="mobileNo" class="form-control">
+								</div>
+
+								<div class="mb-3">
+									<label>Enter Password</label> <input type="text"
+										name="password" class="form-control">
+								</div>
+								<button class="btn btn-primary col-md-12">Register</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+
+
+
+
+	</section>
 </body>
 </html>

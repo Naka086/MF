@@ -11,4 +11,5 @@ public class Test {
         this.score = score;
         this.startDate = startDate;
     }
+
 }
