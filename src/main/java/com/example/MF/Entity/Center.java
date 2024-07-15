@@ -15,7 +15,9 @@ public class Center {
         this.name = name;
         this.location = location;
     }
+    public Center() {
 
+    }
     public Long getId() {
         return id;
     }

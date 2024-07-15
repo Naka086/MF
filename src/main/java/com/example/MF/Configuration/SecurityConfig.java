@@ -1,6 +1,7 @@
 package com.becoder.config;
 
 
+import com.example.MF.Repository.UserRepository;
 import com.example.MF.Service.Impl.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +40,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public UserDetailsService userDetailsService() {
-		return new UserServiceImpl();
+	public UserDetailsService userDetailsService(UserRepository userRepository) {
+		return new UserServiceImpl(userRepository);
 	}
 }

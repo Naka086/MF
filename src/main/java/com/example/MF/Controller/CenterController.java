@@ -26,7 +26,6 @@ public class CenterController {
 
     @GetMapping("/add")
     public String addCenterForm(Model model) {
-
         model.addAttribute("center", new Center());
         return "centers/add-edit";
     }
