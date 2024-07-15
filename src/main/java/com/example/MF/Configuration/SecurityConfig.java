@@ -21,7 +21,16 @@ public class SecurityConfig {
 								.requestMatchers("/fresher/**").hasRole("FRESHER")
 								.requestMatchers("/home", "/login").permitAll()
 								.anyRequest().authenticated()
-			);
+			)
+				.exceptionHandling()
+				.and()
+				.formLogin()
+				.loginPage("/login").permitAll()
+				.and()
+				.logout()
+				.permitAll()
+				.and();
+		return http.build();
 	}
 
 	@Bean
