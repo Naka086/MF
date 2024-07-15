@@ -8,12 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    public User findByEmail(String emaill);
+    public User findByEmail(String username);
 
-    public User findByVerificationCode(String code);
-
-    @Query("update User u set u.failedAttempt=?1 where u.email=?2")
-    @Modifying
-    public void updateFailedAttempt(int failedAttempt,String email);
-
+    User findByUsername(String username);
 }

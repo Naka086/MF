@@ -28,7 +28,7 @@ public class CustomAuthSucessHandler extends SimpleUrlAuthenticationSuccessHandl
 
 		Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
-		CustomUser userDetails = (CustomUser) authentication.getPrincipal();
+		CustomUserService userDetails = (CustomUserService) authentication.getPrincipal();
 
 		if (userDetails != null) {
 

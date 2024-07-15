@@ -1,69 +1,34 @@
-package com.example.demo.controller;
+package com.example.MF.Service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.example.MF.Entity.User;
-import com.example.MF.Service.UserService;
+import com.example.MF.Repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-@Controller
-public class UserController {
 
+@Service
+class UserController implements UserDetailsService {
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
 
-    @GetMapping("/admin/users")
-    public String getAllUsers(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
-        return "admin/users";
-    }
-
-    @GetMapping("/manager/dashboard")
-    public String managerDashboard() {
-        return "manager/dashboard";
-    }
-
-    @GetMapping("/user/profile/{username}")
-    public String userProfile(@PathVariable("username") String username, Model model) {
-        User user = userService.getUserByUsername(username);
-        model.addAttribute("user", user);
-        return "user/profile";
-    }
-
-    @GetMapping("/users")
-    public String users (Model model) {
-        model.addAttribute("users", userService.findUsers());
-        return "users";
-    }
-
-    @GetMapping("/register")
-    public String registration(Model model) {
-        User user = new User();
-        model.addAttribute("user", user);
-        return "register";
-    }
-
-    @PostMapping("/saveUser")
-    public String saveUser(@ModelAttribute("user") User user) {
-        userService.saveUser(user);
-        return "redirect:/users";
-    }
-
-    @GetMapping("/updateUser/{id}")
-    public String updateUser(Model model, @PathVariable Long id) {
-        User user = userService.getUserId(id);
-        model.addAttribute("user", user);
-        return "updateForm";
-    }
-
-    @GetMapping("/deleteUser/{id}")
-    public String deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return "redirect:/users";
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        Set<SimpleGrantedAuthority> grantedAuthorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toSet());
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }
 }
-
